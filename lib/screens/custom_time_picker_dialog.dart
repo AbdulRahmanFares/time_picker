@@ -22,6 +22,12 @@ class _CustomTimePickerDialogState extends State<CustomTimePickerDialog> {
   double selectedHour = 0.0;
   double selectedMinute = 0.0;
   bool isHourSelected = true;
+  String get imagePath {
+    // Change the image path based on the condition
+    return (selectedHour / 24) >= 0.5
+      ? "assets/images/night.png"
+      : "assets/images/morning.png";
+  }
 
   // Helper function to format time
   String formatTime(double hour, double minute) {
@@ -54,7 +60,7 @@ class _CustomTimePickerDialogState extends State<CustomTimePickerDialog> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     // Calculate the position of the yellow container based on the selected hour
-    final double containerPosition = screenWidth * 0.516 * (selectedHour / 24.0);
+    final double containerPosition = screenWidth * 0.5 * (selectedHour / 21);
 
     return AlertDialog(
       backgroundColor: Colors.white,
@@ -74,13 +80,10 @@ class _CustomTimePickerDialogState extends State<CustomTimePickerDialog> {
                     alignment: Alignment.centerLeft,
                     child: Transform.translate(
                       offset: Offset(containerPosition, 0),
-                      child: Container(
+                      child: SizedBox(
                         height: screenWidth * 0.15,
                         width: screenWidth * 0.15,
-                        decoration: BoxDecoration(
-                          color: Colors.yellow.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(screenWidth * 0.1)
-                        )
+                        child: Image.asset(imagePath)
                       )
                     )
                   ),

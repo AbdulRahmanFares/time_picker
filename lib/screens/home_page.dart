@@ -14,6 +14,10 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   final obj = Constants();
+  String fromTime = "From";
+  String toTime = "To";
+  String lastSelectedFromTime = "From";
+  String lastSelectedToTime = "To";
   
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,23 @@ class _HomePageState extends State<HomePage> {
       showDialog(
         context: context,
         builder: (BuildContext context) {
-          return const CustomTimePickerDialog();
+          return CustomTimePickerDialog(
+            onTimeSelected: (formattedTime) {
+              setState(() {
+                if (isFromTime) {
+                  fromTime = formattedTime;
+                  lastSelectedFromTime = formattedTime;
+                } else {
+                  toTime = formattedTime;
+                  lastSelectedToTime = formattedTime;
+                }
+              });
+            },
+            // Pass the initial time to the dialog
+            initialTime: isFromTime
+              ? lastSelectedFromTime
+              : lastSelectedToTime
+          );
         }
       );
     }
@@ -92,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(screenWidth * 0.07)
                         ),
                         child: Text(
-                          "From",
+                          fromTime,
                           style: GoogleFonts.poppins(
                             fontSize: screenWidth * 0.04,
                             color: Colors.grey,
@@ -118,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(screenWidth * 0.07)
                         ),
                         child: Text(
-                          "To",
+                          toTime,
                           style: GoogleFonts.poppins(
                             fontSize: screenWidth * 0.04,
                             color: Colors.grey,

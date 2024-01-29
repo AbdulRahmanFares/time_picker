@@ -3,7 +3,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:time_picker/constants.dart';
 
 class CustomTimePickerDialog extends StatefulWidget {
-  const CustomTimePickerDialog({super.key});
+  final void Function(String formattedTime) onTimeSelected;
+  final String initialTime;
+
+  const CustomTimePickerDialog({
+    Key? key,
+    required this.onTimeSelected,
+    required this.initialTime
+  }) : super(key: key);
 
   @override
   State<CustomTimePickerDialog> createState() => _CustomTimePickerDialogState();
@@ -12,10 +19,32 @@ class CustomTimePickerDialog extends StatefulWidget {
 class _CustomTimePickerDialogState extends State<CustomTimePickerDialog> {
 
   final obj = Constants();
-  double selectedHourForFromTime = 1.0;
-  double selectedMinuteForFromTime = 0.0;
-  bool isHourSelectedForFromTime = true;
-  bool isAMSelected = true; // To track AM / PM selection
+  double selectedHour = 0.0;
+  double selectedMinute = 0.0;
+  bool isHourSelected = true;
+
+  // Helper function to format time
+  String formatTime(double hour, double minute) {
+    return "${hour.toInt()}:${minute.toInt().toString().padLeft(2, "0")}";
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Set the initial time based on the passed value
+    if (widget.initialTime != "From" && widget.initialTime != "To") {
+      List<String> initialTimeParts = widget.initialTime.split(":");
+      selectedHour = double.parse(initialTimeParts[0]);
+      selectedMinute = double.parse(initialTimeParts[1]);
+      isHourSelected = true; // Assuming hour is initially selected
+    } else {
+      // Set default values or handle differently based on your requriement
+      selectedHour = 0.0;
+      selectedMinute = 0.0;
+      isHourSelected = true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +54,7 @@ class _CustomTimePickerDialogState extends State<CustomTimePickerDialog> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     // Calculate the position of the yellow container based on the selected hour
-    final double containerPosition = screenWidth * 0.5 * (selectedHourForFromTime / 12.0);
+    final double containerPosition = screenWidth * 0.516 * (selectedHour / 24.0);
 
     return AlertDialog(
       backgroundColor: Colors.white,
@@ -78,21 +107,21 @@ class _CustomTimePickerDialogState extends State<CustomTimePickerDialog> {
                       thumbColor: obj.kashmirBlue,
                       activeColor: Colors.grey,
                       inactiveColor: Colors.white,
-                      value: isHourSelectedForFromTime
-                        ? selectedHourForFromTime
-                        : selectedMinuteForFromTime,
-                      min: isHourSelectedForFromTime
-                        ? 1
+                      value: isHourSelected
+                        ? selectedHour
+                        : selectedMinute,
+                      min: isHourSelected
+                        ? 0
                         : 0,
-                      max: isHourSelectedForFromTime
-                        ? 12
+                      max: isHourSelected
+                        ? 23
                         : 59,
                       onChanged: (value) {
                         setState(() {
-                          if (isHourSelectedForFromTime) {
-                            selectedHourForFromTime = value;
+                          if (isHourSelected) {
+                            selectedHour = value;
                           } else {
-                            selectedMinuteForFromTime = value;
+                            selectedMinute = value;
                           }
                         });
                       }
@@ -104,145 +133,69 @@ class _CustomTimePickerDialogState extends State<CustomTimePickerDialog> {
 
                   // Display selected time
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
 
-                      // Time
-                      Row(
-                        children: [
-
-                          // Hour
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isHourSelectedForFromTime = true;
-                              });
-                            },
-                            child: Container(
-                              height: screenHeight * 0.07,
-                              width: screenWidth * 0.15,
-                              decoration: BoxDecoration(
-                                color: isHourSelectedForFromTime
-                                  ? Colors.white
-                                  : obj.lavender,
-                                border: Border.all(
-                                  color: Colors.white
-                                )
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "${selectedHourForFromTime.toInt()}",
-                                  style: GoogleFonts.workSans(
-                                    fontSize: screenWidth * 0.06,
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.bold
-                                  )
-                                )
-                              )
+                      // Hour
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isHourSelected = true;
+                          });
+                        },
+                        child: Container(
+                          height: screenHeight * 0.07,
+                          width: screenWidth * 0.15,
+                          decoration: BoxDecoration(
+                            color: isHourSelected
+                              ? Colors.white
+                              : obj.lavender,
+                            border: Border.all(
+                              color: Colors.white
                             )
                           ),
-
-                          // Minutes
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isHourSelectedForFromTime = false;
-                              });
-                            },
-                            child: Container(
-                              height: screenHeight * 0.07,
-                              width: screenWidth * 0.15,
-                              decoration: BoxDecoration(
-                                color: isHourSelectedForFromTime
-                                  ? obj.lavender
-                                  : Colors.white,
-                                border: Border.all(
-                                  color: Colors.white
-                                )
-                              ),
-                              child: Center(
-                                child: Text(
-                                  selectedMinuteForFromTime.toInt().toString().padLeft(2, "0"),
-                                  style: GoogleFonts.workSans(
-                                    fontSize: screenWidth * 0.055,
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.bold
-                                  )
-                                )
+                          child: Center(
+                            child: Text(
+                              "${selectedHour.toInt()}",
+                              style: GoogleFonts.workSans(
+                                fontSize: screenWidth * 0.06,
+                                color: Colors.black54,
+                                fontWeight: FontWeight.bold
                               )
                             )
                           )
-                        ]
+                        )
                       ),
 
-                      // Periods
-                      Column(
-                        children: [
-
-                          // AM
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isAMSelected = true;
-                              });
-                            },
-                            child: Container(
-                              height: screenHeight * 0.035,
-                              width: screenWidth * 0.1,
-                              decoration: BoxDecoration(
-                                color: isAMSelected
-                                  ? Colors.white
-                                  : obj.lavender,
-                                border: Border.all(
-                                  color: Colors.white
-                                )
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "AM",
-                                  style: GoogleFonts.poppins(
-                                    fontSize: screenWidth * 0.03,
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 1
-                                  )
-                                )
-                              )
+                      // Minutes
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isHourSelected = false;
+                          });
+                        },
+                        child: Container(
+                          height: screenHeight * 0.07,
+                          width: screenWidth * 0.15,
+                          decoration: BoxDecoration(
+                            color: isHourSelected
+                              ? obj.lavender
+                              : Colors.white,
+                            border: Border.all(
+                              color: Colors.white
                             )
                           ),
-
-                          // PM
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isAMSelected = false;
-                              });
-                            },
-                            child: Container(
-                              height: screenHeight * 0.035,
-                              width: screenWidth * 0.1,
-                              decoration: BoxDecoration(
-                                color: isAMSelected
-                                  ? obj.lavender
-                                  : Colors.white,
-                                border: Border.all(
-                                  color: Colors.white
-                                )
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "PM",
-                                  style: GoogleFonts.poppins(
-                                    fontSize: screenWidth * 0.03,
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 1
-                                  )
-                                )
+                          child: Center(
+                            child: Text(
+                              selectedMinute.toInt().toString().padLeft(2, "0"),
+                              style: GoogleFonts.workSans(
+                                fontSize: screenWidth * 0.055,
+                                color: Colors.black54,
+                                fontWeight: FontWeight.bold
                               )
                             )
                           )
-                        ]
+                        )
                       )
                     ]
                   ),
@@ -279,7 +232,20 @@ class _CustomTimePickerDialogState extends State<CustomTimePickerDialog> {
 
                 // Ok
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    setState(() {
+                      // Format the selected time in 24-hour format
+                      String formattedTime = formatTime(
+                        selectedHour,
+                        selectedMinute
+                      );
+
+                      // Update the actual values upon pressing "Ok"
+                      widget.onTimeSelected(formattedTime);
+                      
+                      Navigator.of(context).pop(); // Close the dialog box
+                    });
+                  },
                   child: Text(
                     "Ok",
                     style: GoogleFonts.poppins(

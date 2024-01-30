@@ -18,11 +18,23 @@ Navigating through time slots has never been more engaging. The interactive inte
 
 ## Screenshots
 
-![Screenshot 1](screenshots/time_picker_1.png)
+<img src="screenshots/time_picker_1.png" width="400">
 
-![Screenshot 2](screenshots/time_picker_2.png)
+<img src="screenshots/time_picker_2.png" width="400">
 
-![Screenshot 3](screenshots/time_picker_3.png)
+<img src="screenshots/time_picker_3.png" width="400">
+
+<img src="screenshots/time_picker_4.png" width="400">
+
+<img src="screenshots/time_picker_5.png" width="400">
+
+<img src="screenshots/time_picker_6.png" width="400">
+
+<img src="screenshots/time_picker_7.png" width="400">
+
+<img src="screenshots/time_picker_8.png" width="400">
+
+<img src="screenshots/time_picker_9.png" width="400">
 
 ## Getting Started
 
@@ -31,7 +43,7 @@ To experience the elegance of the Time Picker app, follow these steps:
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/yourusername/time_picker.git
+   git clone https://github.com/AbdulRahmanFares/time_picker.git
    ```
 
 2. **Navigate to the Project Directory:**
@@ -58,21 +70,37 @@ To experience the elegance of the Time Picker app, follow these steps:
 
 ## How to Use
 
-1. **Open the Time Picker Dialog:**
+1. **Launch the App:**
 
-   Launch the app and navigate to the screen where the time picker is implemented.
+   Upon launching the app, you will be greeted with a container featuring two options: "From" and "To". This initial screen serves as the starting point for selecting your desired time range.
 
-2. **Select Time Range:**
+2. **Select "From":**
 
-   Tap on the "From" and "To" time slots in the dialog to set the desired time range.
+   - Tap on the "From" option within the container to initiate the time selection process.
 
-3. **Real-Time Updates:**
+   - A customized time picker dialog will appear, providing an interactive interface to choose the starting time of your desired range.
 
-   Witness real-time updates in the selected time values as you interact with the dialog.
+   - Use the dialog to precisely set the "From" time according to your requirements.
 
-4. **Confirm or Cancel:**
+3. **Select "To":**
 
-   Confirm your selected time range by tapping the "Ok" button. Alternatively, cancel the selection and close the dialog using the "Cancel" button.
+   - Similarly, tap on the "To" option within the container to begin selecting the ending time of your range.
+
+   - The same customized time picker dialog will be presented, allowing you to pick the concluding time with ease.
+
+   - Adjust the dialog to accurately set the "To" time based on your preferences.
+
+4. **Real-Time Updates:**
+
+   - Experience real-time updates in the selected time values as you interact with the dialog. The chosen times will dynamically adjust, providing instant feedback.
+
+5. **Confirm or Cancel:**
+
+   - Confirm your selected time range by tapping the "Ok" button within the time picker dialog.
+
+   - Alternatively, if you wish to cancel the selection, use the "Cancel" button to close the dialog without making any changes.
+
+This interactive process ensures a seamless and intuitive way to choose a time range, making use of the customized time picker dialog for both "From" and "To" options.
 
 ## Dependencies
 
